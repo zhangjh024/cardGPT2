@@ -35,7 +35,8 @@ const ChatGPTSSEApi = (data, conf) => {
       : { 'Content-Type': 'application/json' }
 
   const payload = conf.transformRequest.reduce((acc, transform) => transform(acc), data)
-
+  // 该表达式的目的是将输入的 data 对象转换为适合 ChatGPT API 的请求格式。
+  // payload 变量将存储 chatRequest 函数返回的 JSON 字符串，该字符串将在后续步骤中用作请求的有效负载。
   return new SSE(conf.baseURL, {
     headers,
     payload,

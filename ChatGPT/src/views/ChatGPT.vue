@@ -1,4 +1,4 @@
-<script setup>
+x<script setup>
 import LogoMenu from '../components/LogoMenu.vue'
 import MessageBox from '../components/MessageBox.vue'
 import SideBar from '../components/SideBar.vue'
@@ -11,20 +11,6 @@ const messagesStore = useMessagesStore()
 const sysStore = useSysStore()
 const messages = messagesStore.initMessages()
 
-// const role_list = reactive([
-//   {
-//     label: '用户',
-//     value: 'user'
-//   },
-//   {
-//     label: '助手',
-//     value: 'assistant'
-//   },
-//   {
-//     label: '系统',
-//     value: 'system'
-//   }
-// ])
 
 const openSideBarHandle = () => {
   sysStore.openSideBar = !sysStore.openSideBar
@@ -45,11 +31,11 @@ const openSideBarHandle = () => {
         />
       </div>
       <div class="flex flex-col w-full h-full border-0 rounded-3xl shadow-2xl shadow-indigo-900">
-        <LogoMenu title="ChatGPT"></LogoMenu>
+        <LogoMenu title="GPT自建站"></LogoMenu>
         <MessageBox :messages="messages" :display="messagesStore.display" />
         <StopRequest></StopRequest>
         <div class="flex m-5">
-          <div class="flex items-center mr-4">
+          <div class="flex mr-4">
             <el-button color="#f1f5f9" @click="openSideBarHandle" circle :icon="House"></el-button>
           </div>
           <AutoInput></AutoInput>
@@ -70,6 +56,8 @@ const openSideBarHandle = () => {
 
 <style scoped>
 .chat {
-  background: linear-gradient(to right bottom, #ab79c2, #8a84bf, #6b91c1);
+  /*background: linear-gradient(to right bottom, #ab79c2, #8a84bf, #6b91c1);*/
+  background: linear-gradient(to left bottom, #1e3c72, #2a5298, #2c7da7, #33a8b8, #30c9c3);
+
 }
 </style>

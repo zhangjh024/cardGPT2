@@ -94,6 +94,7 @@ export const useChatStore = defineStore(
     }
   },
   {
+
     persist: {
       paths: ['chats', 'currentChatIdx'],
       afterRestore: (ctx) => {

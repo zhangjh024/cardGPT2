@@ -144,7 +144,7 @@ export const useMessagesStore = defineStore('messages', () => {
         try {
           error_msg = JSON.parse(e.data)
         } catch (error) {
-          error_msg = { details: '未知错误,请先检查代理是否正确' }
+          error_msg = { details: '请打开vpn访问' }
         }
         del(streamId)
         pushMessage(
@@ -184,7 +184,7 @@ export const useMessagesStore = defineStore('messages', () => {
           try {
             error_msg = error.response.data
           } catch (error) {
-            error_msg = { details: '未知错误,请先检查代理是否正确' }
+            error_msg = { details: '请打开vpn访问' }
           }
           pushMessage(
             '<font color="red">Error: 请求出错</font>\n' +

@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Plus, Download, Upload, Refresh, ArrowDownBold } from '@element-plus/icons-vue'
+import { ElMessageBox } from 'element-plus'
 import { showMessage } from '../utils/utils'
 import { useChatStore } from '../stores/chat'
 import { useSysStore } from '../stores/sys'
@@ -16,7 +17,8 @@ const sysStore = useSysStore()
 
 const chats = chatStore.chats
 const uploadChatList = ref([])
-const isGetCreditGrants = ref(false)
+
+const dialogVis= ref(false)
 
 defineProps({
   size: {
@@ -24,6 +26,15 @@ defineProps({
     required: true
   }
 })
+const handleClose = () => {
+  ElMessageBox.confirm('Are you sure to close this dialog?')
+      .then(() => {
+        done()
+      })
+      .catch(() => {
+        // catch error
+      })
+}
 
 const newChat = () => {
   if (messagesStore.sending.isSending) {
@@ -41,49 +52,27 @@ const upload = (_, uploadFile) => {
   chatStore.uploadChats(uploadFile.raw)
 }
 
-const getCreditGrants = async () => {
-  if (isGetCreditGrants.value) {
-    showMessage('正在获取余额中...', 'info')
-    return
-  }
-  sysStore.creditGrants = '获取中...'
-  isGetCreditGrants.value = true
-  try {
-    const response = await get_GetCreditGrants(sysStore.API_URL, sysStore.API_KEY)
-    sysStore.creditGrants = response.data.total_available.toFixed(8) + ' USD'
-  } catch (error) {
-    sysStore.creditGrants = '获取失败'
-    console.log(error)
-  } finally {
-    isGetCreditGrants.value = false
-  }
-}
+
 </script>
 
 <template>
   <!-- <div class="p-7 bg-white rounded-3xl" style="height: auto;" v-if="sysStore.openSideBar"> -->
   <div class="flex flex-col h-full w-full">
-    <div
-      class="flex items-center justify-between h-8 mb-2 pb-2 pl-2 border-b border-dashed border-b-gray-400"
-    >
-      <span class="text-sm">余额: {{ sysStore.creditGrants }}</span>
-      <el-button size="small" :icon="Refresh" @click="getCreditGrants">刷新余额</el-button>
-    </div>
     <div class="flex items-center">
       <el-button @click="newChat" :icon="Plus" style="width: 100%">New Chat</el-button>
-      <el-popover placement="left" trigger="click" width="190">
-        <template #reference>
-          <el-button :icon="ArrowDownBold" circle />
-        </template>
-        <template #default>
-          <div class="flex gap-2">
-            <el-button :icon="Download" @click="download">导出</el-button>
-            <el-upload v-model:file-list="uploadChatList" :on-progress="upload" class="flex">
-              <el-button :icon="Upload">导入</el-button>
-            </el-upload>
-          </div>
-        </template>
-      </el-popover>
+<!--      <el-popover placement="left" trigger="click" width="190">-->
+<!--        <template #reference>-->
+<!--          <el-button :icon="ArrowDownBold" circle />-->
+<!--        </template>-->
+<!--        <template #default>-->
+<!--          <div class="flex gap-2">-->
+<!--            <el-button :icon="Download" @click="download">导出</el-button>-->
+<!--            <el-upload v-model:file-list="uploadChatList" :on-progress="upload" class="flex">-->
+<!--              <el-button :icon="Upload">导入</el-button>-->
+<!--            </el-upload>-->
+<!--          </div>-->
+<!--        </template>-->
+<!--      </el-popover>-->
     </div>
     <el-scrollbar>
       <draggable :list="chats" handle=".drag-chat" item-key="idx">
@@ -101,12 +90,24 @@ const getCreditGrants = async () => {
         >关闭</el-button
       >
       <span class="flex items-center justify-center text-sm mt-2 border-2 border-dotted"
-        >Star on &nbsp;<a
-          href="https://github.com/zmlix/chatgpt-web"
-          target="_blank"
-          class="text-blue-400"
-          >GitHub</a
-        >&nbsp; @zmlix
+        ><el-button text @click="dialogVis=true">
+        免责声明
+      </el-button>
+      <el-dialog
+          v-model="dialogVis"
+          title="Tips"
+          width="30%"
+          :before-close="dialogClose"
+      >
+        <span>暂时仅限个人在找实习中学习vue3语法为目的使用</span>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button type="primary" @click="dialogVis = false">
+              确认
+            </el-button>
+          </span>
+        </template>
+      </el-dialog>
       </span>
     </div>
   </div>
